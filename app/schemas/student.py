@@ -28,8 +28,8 @@ class StudentBase(BaseModel):
 
     @field_validator('parent1_phone', 'parent2_phone', mode='before')
     def validate_phone(cls, v, info):
-        if v is None:
-            return v
+        if not v:  # Handles both None and empty strings
+            return None
         try:
             # Use the robust validation and cleaning function
             return PhoneValidatorService._clean_and_validate_phone(v)

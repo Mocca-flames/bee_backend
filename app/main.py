@@ -12,8 +12,13 @@ settings = get_settings()
 logger = setup_logger(settings.log_level)
 
 origins = [
-    "http://localhost:5173",  # Your frontend's origin
-    # You can add other origins if needed, e.g., "http://localhost:3000"
+    "http://localhost:5173",  # Your frontend's origin for development
+    "https://bee.juniorflamebet.workers.dev",  # Your React app on Cloudflare Workers
+    "https://api-proxy.juniorflamebet.workers.dev",  # Your proxy worker
+    "https://*.juniorflamebet.workers.dev",  # Any subdomain of your workers
+    "https://internally-alive-bream.ngrok-free.app",
+    "https://bee-669.pages.dev"
+    # You can add other origins if needed
 ]
 
 @asynccontextmanager

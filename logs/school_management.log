@@ -1,0 +1,13 @@
+2025-09-03 23:18:58,945 - school_management - ERROR - SMS send failed: Authentication failed - check BulkSMS credentials
+2025-09-03 23:18:58,971 - school_management - ERROR - Failed to log SMS result to database: 1 validation error for SMSLogCreate
+student_id
+  Input should be a valid UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `t` at 1 [type=uuid_parsing, input_value='test_student_id', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/uuid_parsing
+2025-09-03 23:19:30,398 - school_management - ERROR - SMS send failed for student test_student_id to d5567c08-6162-4a1d-b9b0-4966d6952e74: Invalid phone number - Invalid South African phone number format: 'd5567c08-6162-4a1d-b9b0-4966d6952e74'. Must start with '0', '27', or '+27'.
+2025-09-03 23:19:30,407 - school_management - ERROR - Failed to log SMS result to database: 2 validation errors for SMSLogCreate
+student_id
+  Input should be a valid UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `t` at 1 [type=uuid_parsing, input_value='test_student_id', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/uuid_parsing
+recipient_phone
+  String should have at most 12 characters [type=string_too_long, input_value='d5567c08-6162-4a1d-b9b0-4966d6952e74', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_too_long
