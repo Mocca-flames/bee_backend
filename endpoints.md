@@ -24,7 +24,8 @@ Creates a new student record.
 ```javascript
 {
   "name": "string",           // Required, 1-255 characters
-  "grade": "string",          // Required
+  "grade": "string",          // Required, e.g., "Grade 1", "Grade 7"
+  "class_letter": "string",   // Required, single uppercase letter (A-Z), defaults to "A"
   "parent1_phone": "string",  // Required
   "parent2_phone": "string",  // Optional
   "fee_status": "string"      // Optional, defaults to "unpaid"
@@ -41,7 +42,8 @@ const createStudent = async (studentData) => {
     },
     body: JSON.stringify({
       name: "John Doe",
-      grade: "10th",
+      grade: "Grade 7",
+      class_letter: "A",
       parent1_phone: "+1234567890",
       parent2_phone: "+0987654321",
       fee_status: "unpaid"
@@ -63,6 +65,8 @@ const createStudent = async (studentData) => {
   "id": "uuid",
   "name": "string",
   "grade": "string",
+  "class_letter": "string",
+  "full_class": "string",      // Computed field, e.g., "Grade 7A"
   "parent1_phone": "string",
   "parent2_phone": "string|null",
   "fee_status": "string",
@@ -79,12 +83,21 @@ const createStudent = async (studentData) => {
 Retrieves a list of students with optional grade filtering.
 
 ### Query Parameters
-- `grade` (optional): Filter students by grade
+- `grade` (optional): Filter students by grade, e.g., "Grade 1"
+- `class_letter` (optional): Filter students by class letter, e.g., "A"
+- `sort_by` (optional): Sort by field (e.g., 'name', 'grade', 'class_letter'). Defaults to `grade`, `class_letter`, then `name` ascending.
+- `sort_order` (optional): Sort order ('asc' or 'desc'). Defaults to 'asc'.
 
 ### JavaScript Request Example
 ```javascript
-const getStudents = async (grade = null) => {
-  const url = grade ? `/api/students/?grade=${encodeURIComponent(grade)}` : '/api/students/';
+const getStudents = async (grade = null, classLetter = null, sortBy = null, sortOrder = 'asc') => {
+  const params = new URLSearchParams();
+  if (grade) params.append('grade', grade);
+  if (classLetter) params.append('class_letter', classLetter);
+  if (sortBy) params.append('sort_by', sortBy);
+  if (sortOrder !== 'asc') params.append('sort_order', sortOrder); // Only append if not default
+
+  const url = `/api/students/${params.toString() ? '?' + params.toString() : ''}`;
   
   const response = await fetch(url, {
     method: 'GET',
@@ -109,6 +122,8 @@ const getStudents = async (grade = null) => {
     "id": "uuid",
     "name": "string",
     "grade": "string",
+    "class_letter": "string",
+    "full_class": "string",
     "parent1_phone": "string",
     "parent2_phone": "string|null",
     "fee_status": "string",
@@ -153,6 +168,8 @@ const getStudent = async (studentId) => {
   "id": "uuid",
   "name": "string",
   "grade": "string",
+  "class_letter": "string",
+  "full_class": "string",
   "parent1_phone": "string",
   "parent2_phone": "string|null",
   "fee_status": "string",
@@ -175,7 +192,8 @@ Updates a student record.
 ```javascript
 {
   "name": "string|null",           // Optional, 1-255 characters if provided
-  "grade": "string|null",          // Optional
+  "grade": "string|null",          // Optional, e.g., "Grade 1", "Grade 7"
+  "class_letter": "string|null",   // Optional, single uppercase letter (A-Z)
   "parent1_phone": "string|null",  // Optional
   "parent2_phone": "string|null",  // Optional
   "fee_status": "string|null"      // Optional
@@ -192,7 +210,8 @@ const updateStudent = async (studentId, updateData) => {
     },
     body: JSON.stringify({
       name: "Jane Doe",
-      grade: "11th",
+      grade: "Grade 7",
+      class_letter: "B",
       fee_status: "paid"
     })
   });
@@ -212,6 +231,8 @@ const updateStudent = async (studentId, updateData) => {
   "id": "uuid",
   "name": "string",
   "grade": "string",
+  "class_letter": "string",
+  "full_class": "string",
   "parent1_phone": "string",
   "parent2_phone": "string|null",
   "fee_status": "string",
@@ -326,8 +347,32 @@ const getStudentStatistics = async () => {
 ### Response Schema (200)
 ```javascript
 {
-  // Dynamic object with various statistics
-  // Exact structure depends on implementation
+  "total_students": "integer",
+  "paid_students": "integer",
+  "unpaid_students": "integer",
+  "students_by_grade_class": {
+    "Grade 1": {
+      "A": "integer",
+      "B": "integer"
+    },
+    "Grade 7": {
+      "A": "integer",
+      "B": "integer",
+      "C": "integer"
+    }
+  },
+  "fee_status_by_grade_class": {
+    "Grade 1": {
+      "A": {
+        "paid": "integer",
+        "unpaid": "integer"
+      },
+      "B": {
+        "paid": "integer",
+        "unpaid": "integer"
+      }
+    }
+  }
 }
 ```
 
@@ -360,12 +405,48 @@ const getAvailableGrades = async () => {
 ### Response Schema (200)
 ```javascript
 [
-  "string" // Array of grade strings
+  "string" // Array of grade strings, e.g., ["Grade 1", "Grade 7"]
 ]
 ```
 
 ---
 
+## 9. Get Available Classes for Grade
+**GET** `/api/students/classes/{grade}`
+
+Retrieves the list of available classes for a specific grade.
+
+### Path Parameters
+- `grade` (required): The grade to filter classes by, e.g., "Grade 1"
+
+### JavaScript Request Example
+```javascript
+const getClassesForGrade = async (grade) => {
+  const response = await fetch(`/api/students/classes/${encodeURIComponent(grade)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  
+  if (response.ok) {
+    const classes = await response.json();
+    return classes;
+  } else {
+    throw new Error('Failed to fetch classes for grade');
+  }
+};
+```
+
+### Response Schema (200)
+```javascript
+[
+  "string" // Array of class letters, e.g., ["A", "B", "C"]
+]
+```
+
+---
+ 
 # SMS Endpoints
 
 ## 1. Send Fee Notification SMS
@@ -379,7 +460,11 @@ Sends fee status notification SMS to specific students' parents.
   "student_ids": ["uuid"],        // Required, array of student UUIDs
   "template_name": "string",      // Required, minimum 1 character
   "template_vars": {              // Optional, key-value pairs for template variables
-    "key": "string"
+    "student_name": "string",     // Example: "John Doe"
+    "fee_status": "string",       // Example: "paid", "unpaid"
+    "grade": "string",            // Example: "Grade 7"
+    "class_letter": "string",     // Example: "A"
+    "message_body": "string"      // For general_announcement or custom templates
   }
 }
 ```
@@ -428,7 +513,8 @@ Sends bulk SMS messages to filtered groups of students' parents.
 {
   "message": "string",           // Required, minimum 1 character
   "filters": {                   // Optional
-    "grades": ["string"],        // Optional, array of grades to filter by
+    "grades": ["string"],        // Optional, array of grade strings to filter by, e.g., ["Grade 1", "Grade 7"]
+    "class_letters": ["string"], // Optional, array of class letters to filter by, e.g., ["A", "B"]
     "fee_status": "string"       // Optional, fee status filter
   },
   "use_primary_contact": boolean // Optional, defaults to true
@@ -463,7 +549,8 @@ const sendToUnpaidFees = () => {
   return sendBulkSMS(
     "Reminder: Your child's school fees are still pending. Please pay at your earliest convenience.",
     {
-      grades: ["10th", "11th", "12th"],
+      grades: ["Grade 7"],
+      class_letters: ["A"],
       fee_status: "unpaid"
     },
     true
@@ -764,10 +851,14 @@ const api = new StudentManagementAPI('http://your-api-domain.com');
       fee_status: "unpaid"
     });
     
-    // Send bulk SMS to unpaid students
+    // Send bulk SMS to unpaid students in Grade 7A
     await api.sendBulkSMS(
       "Fee reminder: Please pay your outstanding fees.",
-      { fee_status: "unpaid" }
+      {
+        grades: ["Grade 7"],
+        class_letters: ["A"],
+        fee_status: "unpaid"
+      }
     );
     
     // Get SMS history

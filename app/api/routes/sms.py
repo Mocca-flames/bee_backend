@@ -78,7 +78,8 @@ async def send_fee_notification_sms(
                 "student_id": str(student.id),
                 "parent1_phone": student.parent1_phone,
                 "status": result1["status"],
-                "detail": result1.get("detail")
+                "detail": result1.get("detail"),
+                "message_id": result1.get("message_id")
             })
 
             # Send to parent2_phone if available
@@ -92,7 +93,8 @@ async def send_fee_notification_sms(
                     "student_id": str(student.id),
                     "parent2_phone": student.parent2_phone,
                     "status": result2["status"],
-                    "detail": result2.get("detail")
+                    "detail": result2.get("detail"),
+                    "message_id": result2.get("message_id")
                 })
         
         await db.commit()
@@ -135,6 +137,10 @@ async def send_bulk_sms_to_filtered_groups(
     if request.filters:
         if request.filters.grades:
             query = query.where(Student.grade.in_(request.filters.grades))
+        if request.filters.class_letters:
+            # Ensure class letters are uppercase for consistency with database
+            upper_class_letters = [cl.upper() for cl in request.filters.class_letters]
+            query = query.where(Student.class_letter.in_(upper_class_letters))
         if request.filters.fee_status:
             query = query.where(Student.fee_status == request.filters.fee_status)
 
@@ -159,7 +165,10 @@ async def send_bulk_sms_to_filtered_groups(
             detail="No valid recipients found for the filtered students."
         )
 
-    bulk_results = await sms_service.send_bulk_sms(list(recipients), request.message)
+    bulk_results = await sms_service.send_bulk_sms(
+        recipients=list(recipients),
+        message=request.message,
+    )
 
     successful_sends = sum(1 for r in bulk_results if r.get("status") == "success")
     if successful_sends == 0:

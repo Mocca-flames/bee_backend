@@ -4,6 +4,7 @@ from uuid import UUID
 
 class SMSFilter(BaseModel):
     grades: Optional[List[str]] = None
+    class_letters: Optional[List[str]] = None
     fee_status: Optional[str] = None
 
 class BulkSMSRequest(BaseModel):

@@ -9,10 +9,9 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
 
-    # BulkSMS Configuration
-    bulksms_username: str
-    bulksms_password: str
-    bulksms_api_url: str = "https://api.bulksms.com/v1/messages"
+    # WinSMS Configuration
+    winsms_api_key: str
+    winsms_api_url: str = "https://www.winsms.co.za/api/rest/v1"  # Correct default URL
 
     # Docker Development
     compose_project_name: str

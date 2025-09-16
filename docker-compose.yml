@@ -25,13 +25,14 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://${DB_USER:-school_admin}:${DB_PASSWORD:-school_password}@db:5432/${DB_NAME:-school_management}
+      - DATABASE_SYNC_URL=postgresql+psycopg2://${DB_USER:-school_admin}:${DB_PASSWORD:-school_password}@db:5432/${DB_NAME:-school_management}
     env_file:
       - .env
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - ./app:/app/app:ro  # Mount for development
+      - .:/app  # Mount the entire project for development and Alembic access
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 volumes:

@@ -14,6 +14,7 @@ class SMSLog(Base):
     message_content = Column(Text, nullable=False)
     status = Column(String(20), nullable=False) # e.g., 'success', 'failed', 'pending'
     error_detail = Column(Text, nullable=True)
+    api_message_id = Column(String(50), nullable=True) # To store WinSMS API message ID
     sent_at = Column(DateTime(timezone=True), server_default=func.now())
     is_bulk = Column(Boolean, default=False)
     template_name = Column(String(50), nullable=True)

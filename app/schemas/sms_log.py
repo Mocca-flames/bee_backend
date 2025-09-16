@@ -9,6 +9,7 @@ class SMSLogBase(BaseModel):
     message_content: str = Field(..., min_length=1)
     status: str = Field(..., min_length=1)
     error_detail: Optional[str] = None
+    api_message_id: Optional[str] = None # To store WinSMS API message ID
     is_bulk: bool = False
     template_name: Optional[str] = None
 

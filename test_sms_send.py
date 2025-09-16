@@ -49,24 +49,27 @@ async def run_test_send_sms():
     
     sms_service = SMSService(settings, mock_db)
 
-    test_numbers = ["d5567c08-6162-4a1d-b9b0-4966d6952e74"]
-    test_message = "This is a test message from the individual SMS script."
+    # Test 1: Get credit balance
+    print("Testing credit balance...")
+    balance_result = await sms_service.get_balance()
+    print(f"Balance result: {balance_result}")
+    assert balance_result["status"] == "success", "Failed to get credit balance"
+    print("✓ Credit balance test passed")
 
-    print(f"Attempting to send SMS to: {test_numbers}")
+    # Test 2: Send a single SMS
+    test_number = "27669990771"  # Replace with a valid test number in 27XXXXXXXXX format
+    test_message = "This is a test message from the WinSMS integration script."
+
+    print(f"\nAttempting to send SMS to: {test_number}")
     print(f"Message: {test_message}")
 
-    results = []
-    for number in test_numbers:
-        print(f"\nSending to {number}...")
-        result = await sms_service.send_sms(to=number, message=test_message, student_id="test_student_id")
-        results.append(result)
-        print(f"Result for {number}: {result}")
+    send_result = await sms_service.send_sms(to=test_number, message=test_message, student_id="00000000-0000-0000-0000-000000000001")
+    print(f"SMS send result: {send_result}")
+    assert send_result["status"] == "success", "Failed to send SMS"
+    print("✓ SMS sending test passed")
 
     await sms_service.close()
-    print("\nSMS sending test complete.")
-    print("Overall results:")
-    for i, number in enumerate(test_numbers):
-        print(f"  {number}: {results[i]}")
+    print("\nWinSMS integration tests complete.")
 
 if __name__ == "__main__":
     asyncio.run(run_test_send_sms())
