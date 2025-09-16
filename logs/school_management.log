@@ -1212,3 +1212,41 @@ DETAIL:  Key (name, grade, class_letter)=(BUSY BEESCHOOL, Grade 7, W) already ex
 2025-09-16 10:40:00,306 - school_management - ERROR - SMS send failed for student 67865744-06f1-4d68-bd85-81775e656bd2 to 27798984117: HTTP 422: {"timeStamp":"20250916123959959","version":"1.0","statusCode":422,"errorMessage":"A valid 'message' parameter must be specified. Please note the capitalisation of 'message'."}
 2025-09-16 10:40:00,388 - school_management - ERROR - Transaction failed for fee notification SMS: 500: Failed to send any SMS notifications.
 2025-09-16 10:40:00,403 - school_management - INFO - POST /api/sms/fee-notification - 500 - 0.8126s
+2025-09-16 10:41:58,440 - school_management - INFO - SMSService initialized with Base URL: https://www.winsms.co.za/api/rest/v1 and API Key (first 5 chars): D1CA7*****
+2025-09-16 10:41:58,450 - school_management - INFO - Successfully resolved www.winsms.co.za to 104.26.15.184
+2025-09-16 10:41:58,920 - school_management - INFO - SMS sent successfully to 27699977011 for student 67865744-06f1-4d68-bd85-81775e656bd2. WinSMS API Message ID: 6
+2025-09-16 10:41:59,150 - school_management - INFO - SMS sent successfully to 27798984117 for student 67865744-06f1-4d68-bd85-81775e656bd2. WinSMS API Message ID: 7
+2025-09-16 10:41:59,231 - school_management - INFO - POST /api/sms/fee-notification - 200 - 0.8837s
+2025-09-16 10:42:52,121 - school_management - INFO - Fetched available grades: ['Grade 7']
+2025-09-16 10:42:52,129 - school_management - INFO - GET /api/students/grades - 200 - 0.0544s
+2025-09-16 10:42:52,160 - school_management - INFO - Fetched available grades: ['Grade 7']
+2025-09-16 10:42:52,173 - school_management - INFO - GET /api/students/grades - 200 - 0.0170s
+2025-09-16 10:42:55,161 - school_management - INFO - Fetched 48 students
+2025-09-16 10:42:55,189 - school_management - INFO - GET /api/students/ - 200 - 0.0681s
+2025-09-16 10:42:55,223 - school_management - INFO - Fetched 48 students
+2025-09-16 10:42:55,233 - school_management - INFO - GET /api/students/ - 200 - 0.0249s
+2025-09-16 10:52:14,866 - school_management - INFO - Fetched 48 students
+2025-09-16 10:52:14,885 - school_management - INFO - GET /api/students/ - 200 - 0.0323s
+2025-09-16 10:54:19,967 - school_management - INFO - Fetched 48 students
+2025-09-16 10:54:19,985 - school_management - INFO - GET /api/students/ - 200 - 0.0681s
+2025-09-16 10:54:20,030 - school_management - INFO - Fetched 48 students
+2025-09-16 10:54:20,053 - school_management - INFO - GET /api/students/ - 200 - 0.0296s
+2025-09-16 10:55:08,329 - school_management - INFO - Fetched 48 students
+2025-09-16 10:55:08,466 - school_management - INFO - GET /api/students/ - 200 - 0.1442s
+2025-09-16 10:58:09,961 - school_management - INFO - SMSService initialized with Base URL: https://www.winsms.co.za/api/rest/v1 and API Key (first 5 chars): D1CA7*****
+2025-09-16 10:58:10,019 - school_management - INFO - Successfully resolved www.winsms.co.za to 172.67.73.85
+2025-09-16 10:58:10,316 - school_management - INFO - SMS sent successfully to 27699977011 for student 67865744-06f1-4d68-bd85-81775e656bd2. WinSMS API Message ID: 8
+2025-09-16 10:58:10,451 - school_management - INFO - SMS sent successfully to 27798984117 for student 67865744-06f1-4d68-bd85-81775e656bd2. WinSMS API Message ID: 9
+2025-09-16 10:58:10,513 - school_management - INFO - POST /api/sms/fee-notification - 200 - 0.6354s
+2025-09-16 10:58:55,990 - school_management - INFO - Fetched available grades: ['Grade 7']
+2025-09-16 10:58:56,113 - school_management - INFO - GET /api/students/grades - 200 - 0.1291s
+2025-09-16 10:58:56,206 - school_management - INFO - Fetched available grades: ['Grade 7']
+2025-09-16 10:58:56,227 - school_management - INFO - GET /api/students/grades - 200 - 0.0247s
+2025-09-16 10:58:58,910 - school_management - INFO - Fetched 48 students
+2025-09-16 10:58:58,969 - school_management - INFO - GET /api/students/ - 200 - 0.0690s
+2025-09-16 10:58:59,060 - school_management - INFO - Fetched 48 students
+2025-09-16 10:58:59,084 - school_management - INFO - GET /api/students/ - 200 - 0.0287s
+2025-09-16 11:15:00,457 - school_management - INFO - Fetched 48 students
+2025-09-16 11:15:00,477 - school_management - INFO - GET /api/students/ - 200 - 0.0840s
+2025-09-16 11:15:00,507 - school_management - INFO - Fetched 48 students
+2025-09-16 11:15:00,533 - school_management - INFO - GET /api/students/ - 200 - 0.0377s
